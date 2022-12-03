@@ -15,8 +15,13 @@ const params = {
 };
 
 function newTextFile(data) {
-  fs.writeFile('output.js', `const text = ${data}`, (err => {
-    if (err) throw err;
+
+  fs.writeFile('./outputs/output.js', `const text = ${data}`, (err => {
+    if (err) { 
+      throw err;
+    } else {
+      console.log("alasjdfl;kajsdlkfjals;dfkjlasjdflajdfjas", data.text)
+    }
   }))
 }
 
@@ -43,6 +48,7 @@ fetch(url, params)
   .then(response => response.json())
   .then(data => {
     print(data);
+    newTextFile(data);
   })
   .catch((error) => {
     console.error(`Error: ${error}`);

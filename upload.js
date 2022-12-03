@@ -1,8 +1,11 @@
 import 'dotenv/config';
 import fetch from 'node-fetch';
+import axios from 'axios';
 
 const url = 'https://api.assemblyai.com/v2/transcript';
-// node upload.js //Users/calvin/Downloads/assembly-ai.m4a
+// node upload.js [LINK]
+// upload_url: 'https://cdn.assemblyai.com/upload/85a5ebbc-d533-4532-b78f-bf27a8a119cd'
+// 85a5ebbc-d533-4532-b78f-bf27a8a119cd
 
 let args = process.argv.slice(2);
 let audioUrl = args[0];
@@ -10,21 +13,26 @@ const data = {
   "audio_url": audioUrl
 };
 
-const params = {
+const assembly = axios.create({
+  baseURL: "https://api.assemblyai.com/v2",
   headers: {
-    "authorization": process.env.ASSEMBLYAI_API_KEY,
+    authorization: process.env.ASSEMBLYAI_API_KEY,
     "content-type": "application/json",
   },
-  body: JSON.stringify(data),
-  method: "POST"
-};
-
-fetch(url, params)
-  .then(response => response.json())
-  .then(data => {
-    console.log('Success:', data);
-    console.log('ID:', data['id']);
+});
+assembly
+  .post("/transcript", {
+    audio_url: audioUrl,
+    summarization: true,
+    summary_model: "informative",
+    summary_type: "bullets",
+    iab_categories: true,
+    speaker_labels: true
   })
-  .catch((error) => {
-    console.error('Error:', error);
+  .then((data) => {
+    console.log('Success:', data)
+    console.log('ID:', data.id);
+  })
+  .catch((err) => {
+    console.error('Error:', err)
   });

@@ -3,7 +3,7 @@ const axios = require("axios");
 const assembly = axios.create({
     baseURL: "https://api.assemblyai.com/v2",
     headers: {
-        authorization: "YOUR-API-TOKEN",
+        authorization: process.env.ASSEMBLYAI_API_KEY,
         "content-type": "application/json",
     },
 });
